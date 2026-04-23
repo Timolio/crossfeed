@@ -14,6 +14,14 @@ export default defineNuxtConfig({
 
     modules: ['@pinia/nuxt'],
 
+    app: {
+        head: {
+            script: [
+                { src: 'https://telegram.org/js/telegram-web-app.js' }
+            ]
+        }
+    },
+
     runtimeConfig: {
         public: {
             apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000',
