@@ -29,12 +29,12 @@ const save = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <p class="font-semibold text-lg">Настройка канала «{{ channel.title }}»</p>
+  <div class="flex flex-col gap-4 p-4 bg-tg-secondary-bg rounded-xl">
+    <p class="font-semibold text-tg-text">Настройка «{{ channel.title }}»</p>
 
     <div class="flex flex-col gap-1">
-      <label class="text-sm text-gray-500">Язык канала</label>
-      <select v-model="language" class="border rounded-lg px-3 py-2">
+      <label class="text-sm text-tg-hint">Язык канала</label>
+      <select v-model="language" class="bg-tg-bg text-tg-text border border-tg-hint/30 rounded-lg px-3 py-2">
         <option value="">Выбери язык</option>
         <option value="ru">Русский</option>
         <option value="en">English</option>
@@ -43,21 +43,21 @@ const save = async () => {
     </div>
 
     <div class="flex flex-col gap-1">
-      <label class="text-sm text-gray-500">Теги</label>
+      <label class="text-sm text-tg-hint">Теги</label>
       <div class="flex gap-2">
         <input
           v-model="tagInput"
           placeholder="Например: tech"
-          class="border rounded-lg px-3 py-2 flex-1"
+          class="bg-tg-bg text-tg-text border border-tg-hint/30 rounded-lg px-3 py-2 flex-1"
           @keydown.enter.prevent="addTag"
         />
-        <button class="px-4 py-2 bg-gray-100 rounded-lg" @click="addTag">+</button>
+        <button class="px-4 py-2 bg-tg-secondary-bg border border-tg-hint/30 rounded-lg text-tg-text" @click="addTag">+</button>
       </div>
       <div class="flex flex-wrap gap-2 mt-1">
         <span
           v-for="tag in tags"
           :key="tag"
-          class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center gap-1"
+          class="bg-tg-button/10 text-tg-button px-3 py-1 rounded-full text-sm flex items-center gap-1"
         >
           {{ tag }}
           <button class="opacity-60" @click="removeTag(tag)">×</button>
@@ -66,7 +66,7 @@ const save = async () => {
     </div>
 
     <button
-      class="w-full py-3 bg-blue-500 text-white rounded-xl font-medium active:opacity-80 disabled:opacity-40"
+      class="w-full py-3 bg-tg-button text-tg-button-text rounded-xl font-medium active:opacity-80 disabled:opacity-40"
       :disabled="!language"
       @click="save"
     >
