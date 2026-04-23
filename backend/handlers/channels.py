@@ -23,7 +23,7 @@ async def bot_added_to_channel(update: ChatMemberUpdated, bot: Bot):
 
     await bot.send_message(
         user.id,
-        f'Канал "{chat.title}" успешно добавлен! Заполни настройки в приложении.',
+        f'Отлично! Вы добавили бота в канал {chat.title} (@{chat.username}). Закончи настройку в mini app.',
     )
 
     channels = await queries.get_user_channels(user.id)
