@@ -29,7 +29,7 @@ const save = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 p-4 bg-tg-secondary-bg rounded-xl">
+  <div class="flex flex-col gap-4 p-4 bg-tg-section-bg rounded-xl border border-tg-section-separator">
     <p class="font-semibold text-tg-text">Настройка «{{ channel.title }}»</p>
 
     <div class="flex flex-col gap-1">

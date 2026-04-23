@@ -45,29 +45,22 @@ onUnmounted(() => disconnect());
     <div class="p-4 flex flex-col gap-4">
         <AddChannel />
 
-        <div v-if="channels.length" class="flex flex-col gap-2">
+        <div v-if="channels.length" class="flex flex-col rounded-xl overflow-hidden border border-tg-section-separator">
             <div
-                v-for="channel in channels"
+                v-for="(channel, i) in channels"
                 :key="channel.id"
-                class="p-3 bg-tg-secondary-bg rounded-xl flex items-center justify-between"
+                class="p-3 bg-tg-section-bg flex items-center justify-between"
+                :class="{ 'border-t border-tg-section-separator': i > 0 }"
             >
                 <div>
                     <p class="font-medium text-tg-text">{{ channel.title }}</p>
-                    <p class="text-sm text-tg-hint">
-                        {{
-                            channel.username
-                                ? '@' + channel.username
-                                : 'без username'
-                        }}
+                    <p class="text-sm text-tg-subtitle">
+                        {{ channel.username ? '@' + channel.username : 'без username' }}
                     </p>
                 </div>
                 <span
                     class="text-xs px-2 py-1 rounded-full"
-                    :class="
-                        channel.setup_complete
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-yellow-100 text-yellow-700'
-                    "
+                    :class="channel.setup_complete ? 'text-tg-accent' : 'text-tg-destructive'"
                 >
                     {{ channel.setup_complete ? 'Готов' : 'Настрой' }}
                 </span>
