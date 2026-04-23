@@ -42,6 +42,14 @@ async def get_user_channels(owner_id: int) -> list[dict]:
         return [dict(r) for r in rows]
 
 
+async def update_channel_title(channel_id: int, title: str):
+    async with pool.acquire() as conn:
+        await conn.execute(
+            "UPDATE channels SET title = $1 WHERE id = $2",
+            title, channel_id,
+        )
+
+
 async def update_channel(channel_id: int, language: str, tags: list[str]):
     async with pool.acquire() as conn:
         await conn.execute(

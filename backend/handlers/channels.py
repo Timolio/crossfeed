@@ -1,5 +1,5 @@
 from aiogram import Router, F, Bot
-from aiogram.types import ChatMemberUpdated
+from aiogram.types import ChatMemberUpdated, Message
 from db import queries
 from api.websocket import manager
 
@@ -37,3 +37,8 @@ async def bot_added_to_channel(update: ChatMemberUpdated, bot: Bot):
         "event": "channel_added",
         "channel": new_channel,
     })
+
+
+@router.channel_post(F.new_chat_title)
+async def channel_title_changed(message: Message):
+    await queries.update_channel_title(message.chat.id, message.new_chat_title)
