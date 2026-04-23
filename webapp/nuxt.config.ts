@@ -12,7 +12,7 @@ export default defineNuxtConfig({
         plugins: [tailwindcss()],
     },
 
-    modules: ['@pinia/nuxt', 'vue-tg/nuxt'],
+    modules: ['@pinia/nuxt'],
 
     runtimeConfig: {
         public: {
