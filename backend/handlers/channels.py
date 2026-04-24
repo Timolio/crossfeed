@@ -14,7 +14,10 @@ async def bot_added_to_channel(update: ChatMemberUpdated, bot: Bot):
     if chat.type not in ("channel", "supergroup"):
         return
 
-    member_count = await bot.get_chat_member_count(chat.id)
+    try:
+        member_count = await bot.get_chat_member_count(chat.id)
+    except Exception:
+        member_count = 0
     await queries.create_channel(
         channel_id=chat.id,
         owner_id=user.id,
