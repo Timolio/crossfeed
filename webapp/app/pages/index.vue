@@ -25,12 +25,18 @@ const onSaved = async () => {
     await fetchChannels();
 };
 
-const { newChannel, connect, disconnect } = useWebSocket();
+const { newChannel, removedChannelId, connect, disconnect } = useWebSocket();
 
 watch(newChannel, channel => {
     if (!channel) return;
     channels.value.push(channel);
     setupChannel.value = channel;
+});
+
+watch(removedChannelId, id => {
+    if (!id) return;
+    channels.value = channels.value.filter(c => c.id !== id);
+    if (setupChannel.value?.id === id) setupChannel.value = null;
 });
 
 //test

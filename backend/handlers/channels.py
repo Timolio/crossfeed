@@ -41,6 +41,15 @@ async def bot_added_to_channel(update: ChatMemberUpdated, bot: Bot):
     })
 
 
+@router.my_chat_member(F.new_chat_member.status.in_({"kicked", "left"}))
+async def bot_removed_from_channel(update: ChatMemberUpdated):
+    await queries.deactivate_channel(update.chat.id)
+    await manager.send_to_user(update.from_user.id, {
+        "event": "channel_removed",
+        "channel_id": str(update.chat.id),
+    })
+
+
 @router.channel_post(F.new_chat_title)
 async def channel_title_changed(message: Message):
     await queries.update_channel_title(message.chat.id, message.new_chat_title)

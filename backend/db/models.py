@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS channels (
     language VARCHAR(10),
     tags TEXT[],
     member_count INTEGER DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
     setup_complete BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -23,4 +24,8 @@ CREATE TABLE IF NOT EXISTS channels (
 
 ADD_MEMBER_COUNT_COLUMN = """
 ALTER TABLE channels ADD COLUMN IF NOT EXISTS member_count INTEGER DEFAULT 0;
+"""
+
+ADD_IS_ACTIVE_COLUMN = """
+ALTER TABLE channels ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
 """

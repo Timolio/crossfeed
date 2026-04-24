@@ -1,5 +1,6 @@
 export const useWebSocket = () => {
   const newChannel = ref<Record<string, any> | null>(null)
+  const removedChannelId = ref<string | null>(null)
   let ws: WebSocket | null = null
 
   const connect = (userId: number) => {
@@ -12,6 +13,8 @@ export const useWebSocket = () => {
       const data = JSON.parse(event.data)
       if (data.event === 'channel_added') {
         newChannel.value = data.channel
+      } else if (data.event === 'channel_removed') {
+        removedChannelId.value = data.channel_id
       }
     }
   }
@@ -21,5 +24,5 @@ export const useWebSocket = () => {
     ws = null
   }
 
-  return { newChannel, connect, disconnect }
+  return { newChannel, removedChannelId, connect, disconnect }
 }
