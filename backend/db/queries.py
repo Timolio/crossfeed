@@ -38,6 +38,12 @@ async def create_channel(channel_id: int, owner_id: int, username: str | None, t
         )
 
 
+async def get_channel(channel_id: int) -> dict | None:
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("SELECT * FROM channels WHERE id = $1", channel_id)
+        return dict(row) if row else None
+
+
 async def get_user_channels(owner_id: int) -> list[dict]:
     async with pool.acquire() as conn:
         rows = await conn.fetch("SELECT * FROM channels WHERE owner_id = $1 AND is_active = TRUE", owner_id)
@@ -46,7 +52,7 @@ async def get_user_channels(owner_id: int) -> list[dict]:
 
 async def get_all_channels() -> list[dict]:
     async with pool.acquire() as conn:
-        rows = await conn.fetch("SELECT id FROM channels")
+        rows = await conn.fetch("SELECT id FROM channels WHERE is_active = TRUE")
         return [dict(r) for r in rows]
 
 

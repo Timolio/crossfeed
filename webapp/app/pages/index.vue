@@ -11,18 +11,10 @@ const userId = computed(
 
 const { apiUrl } = useRuntimeConfig().public;
 const channels = ref<Record<string, any>[]>([]);
-const setupChannel = ref<Record<string, any> | null>(null);
 
 const fetchChannels = async () => {
     if (!userId.value) return;
     channels.value = await $fetch(`${apiUrl}/api/channels/${userId.value}`);
-    const incomplete = channels.value.find(c => !c.setup_complete);
-    if (incomplete) setupChannel.value = incomplete;
-};
-
-const onSaved = async () => {
-    setupChannel.value = null;
-    await fetchChannels();
 };
 
 const { newChannel, removedChannelId, connect, disconnect } = useWebSocket();
@@ -30,16 +22,13 @@ const { newChannel, removedChannelId, connect, disconnect } = useWebSocket();
 watch(newChannel, channel => {
     if (!channel) return;
     channels.value.push(channel);
-    setupChannel.value = channel;
+    if (!channel.setup_complete) navigateTo(`/channel/${channel.id}`);
 });
 
 watch(removedChannelId, id => {
     if (!id) return;
     channels.value = channels.value.filter(c => c.id !== id);
-    if (setupChannel.value?.id === id) setupChannel.value = null;
 });
-
-//test
 
 onMounted(async () => {
     if (userId.value) {
@@ -68,8 +57,9 @@ const formatCount = (n: number) => {
             <div
                 v-for="(channel, i) in channels"
                 :key="channel.id"
-                class="py-3 px-4 bg-tg-section-bg flex items-center justify-between"
+                class="py-3 px-4 bg-tg-section-bg flex items-center justify-between cursor-pointer active:opacity-70"
                 :class="{ 'border-t border-tg-section-separator': i > 0 }"
+                @click="navigateTo(`/channel/${channel.id}`)"
             >
                 <div>
                     <p class="font-medium text-tg-text">
@@ -94,11 +84,5 @@ const formatCount = (n: number) => {
                 />
             </div>
         </div>
-
-        <ChannelSetup
-            v-if="setupChannel"
-            :channel="setupChannel"
-            @saved="onSaved"
-        />
     </div>
 </template>
