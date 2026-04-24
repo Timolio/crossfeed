@@ -13,6 +13,7 @@ from handlers import start, channels as channel_handlers
 from api.routes.channels import router as channels_router
 from api.websocket import manager
 from db.queries import init_pool
+from db import queries
 
 app = FastAPI()
 
@@ -36,6 +37,18 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
         manager.disconnect(user_id)
 
 
+async def update_member_counts_job(bot: Bot):
+    while True:
+        await asyncio.sleep(86400)  # 24 часа
+        channels = await queries.get_all_channels()
+        for channel in channels:
+            try:
+                count = await bot.get_chat_member_count(channel["id"])
+                await queries.update_member_count(channel["id"], count)
+            except Exception:
+                pass
+
+
 async def main():
     await init_pool(os.getenv("DATABASE_URL"))
 
@@ -50,6 +63,7 @@ async def main():
     await asyncio.gather(
         dp.start_polling(bot),
         server.serve(),
+        update_member_counts_job(bot),
     )
 
 

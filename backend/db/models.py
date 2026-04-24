@@ -15,7 +15,12 @@ CREATE TABLE IF NOT EXISTS channels (
     title VARCHAR(255),
     language VARCHAR(10),
     tags TEXT[],
+    member_count INTEGER DEFAULT 0,
     setup_complete BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+"""
+
+ADD_MEMBER_COUNT_COLUMN = """
+ALTER TABLE channels ADD COLUMN IF NOT EXISTS member_count INTEGER DEFAULT 0;
 """
